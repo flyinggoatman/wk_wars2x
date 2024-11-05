@@ -75,131 +75,185 @@ const lockAudio =
 // that was in the JS file for WraithRS
 const elements = 
 {
-	radar: $( "#radarFrame" ),
-	remote: $( "#rc" ), 
-	plateReader: $( "#plateReaderFrame" ),
+    radar: $( "#radarFrame" ),
+    remote: $( "#rc" ), 
+    plateReader: $( "#plateReaderFrame" ),
 
-	pwrBtn: $( "#pwrBtn" ), 
+    pwrBtn: $( "#pwrBtn" ), 
 
-	uiSettingsBtn: $( "#uiSettings" ), 
-	uiSettingsBox: $( "#uiSettingsBox" ), 
-	closeUiBtn: $( "#closeUiSettings" ),
-	
-	plateReaderBtn: $( "#plateReaderBtn" ), 
-	plateReaderBox: $( "#plateReaderBox" ), 
-	boloText: $( "#boloText" ), 
-	setBoloBtn: $( "#setBoloPlate" ), 
-	clearBoloBtn: $( "#clearBoloPlate" ), 
-	closePrBtn: $( "#closePlateReaderSettings" ),
+    uiSettingsBtn: $( "#uiSettings" ), 
+    uiSettingsBox: $( "#uiSettingsBox" ), 
+    closeUiBtn: $( "#closeUiSettings" ),
+    
+    plateReaderBtn: $( "#plateReaderBtn" ), 
+    plateReaderBox: $( "#plateReaderBox" ), 
+    boloText: $( "#boloText" ), 
+    setBoloBtn: $( "#setBoloPlate" ), 
+    clearBoloBtn: $( "#clearBoloPlate" ), 
+    closePrBtn: $( "#closePlateReaderSettings" ),
 
-	openHelp: $( "#helpBtn" ), 
-	helpWindow: $( "#helpWindow" ), 
-	helpWeb: $( "#helpWeb" ), 
-	closeHelp: $( "#closeHelp" ), 
+    openHelp: $( "#helpBtn" ), 
+    helpWindow: $( "#helpWindow" ), 
+    helpWeb: $( "#helpWeb" ), 
+    closeHelp: $( "#closeHelp" ), 
 
-	closeNewUser: $( "#closeNewUserMsg" ),
-	newUser: $( "#newUser" ),
-	openQsv: $( "#showQuickStartVideo" ),
-	qsvWindow: $( "#quickStart" ), 
-	qsvWeb: $( "#quickStartVideo" ),
-	closeQsv: $( "#closeQuickStart" ),
+    closeNewUser: $( "#closeNewUserMsg" ),
+    newUser: $( "#newUser" ),
+    openQsv: $( "#showQuickStartVideo" ),
+    qsvWindow: $( "#quickStart" ), 
+    qsvWeb: $( "#quickStartVideo" ),
+    closeQsv: $( "#closeQuickStart" ),
 
-	radarScaling: {
-		increase: $( "#radarIncreaseScale" ),
-		decrease: $( "#radarDecreaseScale" ),
-		display: $( "#radarScaleDisplay" )
-	}, 
+    radarScaling: {
+        increase: $( "#radarIncreaseScale" ),
+        decrease: $( "#radarDecreaseScale" ),
+        display: $( "#radarScaleDisplay" )
+    }, 
 
-	remoteScaling: {
-		increase: $( "#remoteIncreaseScale" ),
-		decrease: $( "#remoteDecreaseScale" ),
-		display: $( "#remoteScaleDisplay" )
-	},
+    remoteScaling: {
+        increase: $( "#remoteIncreaseScale" ),
+        decrease: $( "#remoteDecreaseScale" ),
+        display: $( "#remoteScaleDisplay" )
+    },
 
-	plateReaderScaling: {
-		increase: $( "#readerIncreaseScale" ),
-		decrease: $( "#readerDecreaseScale" ),
-		display: $( "#readerScaleDisplay" )
-	},
+    plateReaderScaling: {
+        increase: $( "#readerIncreaseScale" ),
+        decrease: $( "#readerDecreaseScale" ),
+        display: $( "#readerScaleDisplay" )
+    },
 
-	plates: {
-		front: {
-			plate: $( "#frontPlate" ), 
-			text: $( "#frontPlateText" ),
-			fill: $( "#frontPlateTextFill" ),
-			lolite: $( "#frontPlateTextLolite" ),
-			img: $( "#frontPlateImg" ), 
-			lock: $( "#frontPlateLock" )
-		},
+    plates: {
+        front: {
+            plate: $( "#frontPlate" ), 
+            text: $( "#frontPlateText" ),
+            fill: $( "#frontPlateTextFill" ),
+            lolite: $( "#frontPlateTextLolite" ),
+            img: $( "#frontPlateImg" ), 
+            lock: $( "#frontPlateLock" )
+        },
 
-		rear: {
-			plate: $( "#rearPlate" ),
-			text: $( "#rearPlateText" ), 
-			fill: $( "#rearPlateTextFill" ), 
-			lolite: $( "#rearPlateTextLolite" ),
-			img: $( "#rearPlateImg" ), 
-			lock: $( "#rearPlateLock" )
-		}
-	},
+        rear: {
+            plate: $( "#rearPlate" ),
+            text: $( "#rearPlateText" ), 
+            fill: $( "#rearPlateTextFill" ), 
+            lolite: $( "#rearPlateTextLolite" ),
+            img: $( "#rearPlateImg" ), 
+            lock: $( "#rearPlateLock" )
+        }
+    },
 
-	safezoneSlider: $( "#safezone" ), 
-	safezoneDisplay: $( "#safezoneDisplay" ),
-	
-	keyLock: {
-		label: $( "#keyLockLabel" ), 
-		stateLabel: $( "#keyLockStateLabel" )
-	},
+    // Added copyButtons section
+    copyButtons: {
+        front: $( "#copyFrontPlate" ),
+        rear: $( "#copyRearPlate" )
+    },
 
-	patrolSpeed: $( "#patrolSpeed" ),
+    safezoneSlider: $( "#safezone" ), 
+    safezoneDisplay: $( "#safezoneDisplay" ),
+    
+    keyLock: {
+        label: $( "#keyLockLabel" ), 
+        stateLabel: $( "#keyLockStateLabel" )
+    },
 
-	antennas: {
-		front: {
-			targetSpeed: $( "#frontSpeed" ),
-			fastSpeed: $( "#frontFastSpeed" ),
+    patrolSpeed: $( "#patrolSpeed" ),
 
-			dirs: {
-				fwd: $( "#frontDirAway" ),
-				bwd: $( "#frontDirTowards" ),
-				fwdFast: $( "#frontFastDirAway" ), 
-				bwdFast: $( "#frontFastDirTowards" )
-			},
+    antennas: {
+        front: {
+            targetSpeed: $( "#frontSpeed" ),
+            fastSpeed: $( "#frontFastSpeed" ),
 
-			modes: {
-				same: $( "#frontSame" ),
-				opp: $( "#frontOpp" ),
-				xmit: $( "#frontXmit" )
-			},
+            dirs: {
+                fwd: $( "#frontDirAway" ),
+                bwd: $( "#frontDirTowards" ),
+                fwdFast: $( "#frontFastDirAway" ), 
+                bwdFast: $( "#frontFastDirTowards" )
+            },
 
-			fast: {
-				fastLabel: $( "#frontFastLabel" ),
-				lockLabel: $( "#frontFastLockLabel" )
-			}
-		},
+            modes: {
+                same: $( "#frontSame" ),
+                opp: $( "#frontOpp" ),
+                xmit: $( "#frontXmit" )
+            },
 
-		rear: {
-			targetSpeed: $( "#rearSpeed" ),
-			fastSpeed: $( "#rearFastSpeed" ),
+            fast: {
+                fastLabel: $( "#frontFastLabel" ),
+                lockLabel: $( "#frontFastLockLabel" )
+            }
+        },
 
-			dirs: {
-				fwd: $( "#rearDirTowards" ),
-				bwd: $( "#rearDirAway" ), 
-				fwdFast: $( "#rearFastDirTowards" ), 
-				bwdFast: $( "#rearFastDirAway" )
-			},
+        rear: {
+            targetSpeed: $( "#rearSpeed" ),
+            fastSpeed: $( "#rearFastSpeed" ),
 
-			modes: {
-				same: $( "#rearSame" ),
-				opp: $( "#rearOpp" ),
-				xmit: $( "#rearXmit" )
-			},
+            dirs: {
+                fwd: $( "#rearDirTowards" ),
+                bwd: $( "#rearDirAway" ), 
+                fwdFast: $( "#rearFastDirTowards" ), 
+                bwdFast: $( "#rearFastDirAway" )
+            },
 
-			fast: {
-				fastLabel: $( "#rearFastLabel" ),
-				lockLabel: $( "#rearFastLockLabel" )
-			}
-		}
-	}
+            modes: {
+                same: $( "#rearSame" ),
+                opp: $( "#rearOpp" ),
+                xmit: $( "#rearXmit" )
+            },
+
+            fast: {
+                fastLabel: $( "#rearFastLabel" ),
+                lockLabel: $( "#rearFastLockLabel" )
+            }
+        }
+    }
 }
+
+/*------------------------------------------------------------------------------------
+    Event Listeners for Copy Buttons
+------------------------------------------------------------------------------------*/
+elements.copyButtons.front.click( function() {
+    copyPlateToClipboard( 'front' );
+} );
+
+elements.copyButtons.rear.click( function() {
+    copyPlateToClipboard( 'rear' );
+} );
+
+// Function to Show Notification
+function showNotification(message) {
+    const notification = $('#copyNotification');
+    notification.text(message);
+    notification.addClass('show');
+
+    // Remove the 'show' class after the animation completes
+    setTimeout(function() {
+        notification.removeClass('show');
+    }, 2000); // Match the duration of the animation
+}
+
+function copyPlateToClipboard(plateType) {
+    // Get the plate text element
+    let plateTextElement = elements.plates[plateType].fill;
+    let plateText = plateTextElement.text();
+
+    // Fallback method using a temporary textarea
+    let textarea = document.createElement('textarea');
+    textarea.value = plateText;
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+        let successful = document.execCommand('copy');
+        let msg = successful ? 'Plate copied to clipboard!' : 'Failed to copy plate.';
+        showNotification(msg);
+    } catch (err) {
+        showNotification('Clipboard copy not supported.');
+    }
+
+    document.body.removeChild(textarea);
+}
+
+
+
 
 // Antenna mode values
 const modes = 

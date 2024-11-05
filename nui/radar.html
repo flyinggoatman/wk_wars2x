@@ -204,6 +204,7 @@
 				</div>
 
 				<div class="plates">
+					<!-- Front Plate Container -->
 					<div id="frontPlate" class="plate_container">
 						<img id="frontPlateImg" class="plate" src="images/plates/0.png">
 						
@@ -213,19 +214,31 @@
 							<p id="frontPlateTextLolite" class="lolite"></p>
 							<p class="shadow"></p>
 						</div>
+				
+						<!-- Copy Front Plate Button -->
+						<div class="copy_buttons">
+							<button id="copyFrontPlate" class="copy_btn">Copy Front Plate</button>
+						</div>
 					</div>
-
+				
+					<!-- Rear Plate Container -->
 					<div id="rearPlate" class="plate_container">
 						<img id="rearPlateImg" class="plate" src="images/plates/0.png">
-
+				
 						<div id="rearPlateText" class="text_container">
 							<p id="rearPlateTextFill" class="plate_blue"></p>
 							<p class="hilite"></p>
 							<p id="rearPlateTextLolite" class="lolite"></p>
 							<p class="shadow"></p>
 						</div>
+				
+						<!-- Copy Rear Plate Button -->
+						<div class="copy_buttons">
+							<button id="copyRearPlate" class="copy_btn">Copy Rear Plate</button>
+						</div>
 					</div>
 				</div>
+				
 
 				<div class="labels">
 					<p id="frontPlateLock">LOCKED</p>
@@ -317,6 +330,10 @@
 			<iframe id="quickStartVideo" src="about:blank" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"></iframe>
 			<button id="closeQuickStart" class="close">CLOSE VIDEO</button>
 		</div>
+
+
+	<!-- Notification Element -->
+		<div id="copyNotification" class="notification"></div>
 
 		<!-- Load JavaScript files -->
 		<script src="nui://game/ui/jquery.js" type="text/javascript"></script>
