@@ -76,7 +76,7 @@ body {
 	overflow: hidden;
 }
 
-/* Removes the outline when buttons have been clicked */
+
 button:focus { outline: none; }
 
 #radarFrame {
@@ -703,9 +703,21 @@ button:focus { outline: none; }
 		#plateReader .labels p {
 			margin: 0;
 			text-align: center;
-			font-size: 18px;
+			
 		}
-
+		
+		#plateReader .labels .top_label {
+			color: rgb(255, 255, 255);
+			font-size: 18px;
+			padding-top: 10%;
+		}
+		
+		#plateReader .labels .bottom_label {
+			font-size: 16px;
+			padding-bottom: 5%;
+			
+		}
+		
 	#plateReader .plates {
 		width: 100%;
 		height: 110%;
