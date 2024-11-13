@@ -43,114 +43,170 @@ local pairs = pairs
 --[[----------------------------------------------------------------------------------
 	UI loading and key binds registering
 ----------------------------------------------------------------------------------]]--
+-- cl_plate_reader.lua
+
+-- cl_plate_reader.lua
+
+-- Require or include your config and util files as needed
+-- Example:
+-- require "config"
+-- require "util"
+
 local function RegisterKeyBinds()
-	if (UTIL:IsResourceNameValid()) then
-		UTIL:Log("Registering radar commands and key binds.")
+    if (UTIL:IsResourceNameValid()) then
+        UTIL:Log("Registering radar commands and key binds.")
 
-		-- Opens the remote control
-		RegisterCommand("radar_remote", function()
-			if (not RADAR:GetKeyLockState()) then
-				RADAR:OpenRemote()
-			end
-		end)
-		RegisterKeyMapping("radar_remote", "Open Remote Control", "keyboard", CONFIG.keyDefaults.remote_control)
+        -- Opens the remote control
+        RegisterCommand("radar_remote", function()
+            if (not RADAR:GetKeyLockState()) then
+                RADAR:OpenRemote()
+                UTIL:Log("Remote control opened.")
+            else
+                UTIL:Log("Failed to open remote: Keylock is active.")
+            end
+        end)
+        RegisterKeyMapping("radar_remote", "Open Remote Control", "keyboard", CONFIG.keyDefaults.remote_control)
 
-		-- Locks speed from front antenna
-		RegisterCommand("radar_fr_ant", function()
-			if (not RADAR:GetKeyLockState() and PLY:CanControlRadar()) then
-				RADAR:LockAntennaSpeed("front", nil)
+        -- Closes the remote control
+        RegisterCommand("radar_close_remote", function()
+            RADAR:CloseRemote()
+            UTIL:Log("Remote control closed.")
+        end)
+        RegisterKeyMapping("radar_close_remote", "Close Remote Control", "keyboard", "ESC") -- You can map this to Right Mouse Button if supported
 
-				SYNC:LockAntennaSpeed("front", RADAR:GetAntennaDataPacket("front"))
-			end
-		end)
-		RegisterKeyMapping("radar_fr_ant", "Front Antenna Lock/Unlock", "keyboard", CONFIG.keyDefaults.front_lock)
+        -- Locks/unlocks front antenna
+        RegisterCommand("radar_fr_ant", function()
+            if (not RADAR:GetKeyLockState() and PLY:CanControlRadar()) then
+                RADAR:LockAntennaSpeed("front", nil)
+                SYNC:LockAntennaSpeed("front", RADAR:GetAntennaDataPacket("front"))
+                UTIL:Log("Front antenna speed locked/unlocked.")
+            else
+                UTIL:Log("Failed to lock/unlock front antenna: Keylock active or insufficient permissions.")
+            end
+        end)
+        RegisterKeyMapping("radar_fr_ant", "Lock/Unlock Front Antenna", "keyboard", "Numpad8")
 
-		-- Locks speed from rear antenna
-		RegisterCommand("radar_bk_ant", function()
-			if (not RADAR:GetKeyLockState() and PLY:CanControlRadar()) then
-				RADAR:LockAntennaSpeed("rear", nil)
+        -- Locks/unlocks rear antenna
+        RegisterCommand("radar_bk_ant", function()
+            if (not RADAR:GetKeyLockState() and PLY:CanControlRadar()) then
+                RADAR:LockAntennaSpeed("rear", nil)
+                SYNC:LockAntennaSpeed("rear", RADAR:GetAntennaDataPacket("rear"))
+                UTIL:Log("Rear antenna speed locked/unlocked.")
+            else
+                UTIL:Log("Failed to lock/unlock rear antenna: Keylock active or insufficient permissions.")
+            end
+        end)
+        RegisterKeyMapping("radar_bk_ant", "Lock/Unlock Rear Antenna", "keyboard", "Numpad5")
 
-				SYNC:LockAntennaSpeed("rear", RADAR:GetAntennaDataPacket("rear"))
-			end
-		end)
-		RegisterKeyMapping("radar_bk_ant", "Rear Antenna Lock/Unlock", "keyboard", CONFIG.keyDefaults.rear_lock)
+        -- Locks/unlocks front plate
+        RegisterCommand("radar_fr_cam", function()
+            if (not RADAR:GetKeyLockState() and PLY:CanControlRadar()) then
+                READER:LockCam("front", true, false)
+                SYNC:LockReaderCam("front", READER:GetCameraDataPacket("front"))
+                UTIL:Log("Front plate reader locked/unlocked.")
+            else
+                UTIL:Log("Failed to lock/unlock front plate reader: Keylock active or insufficient permissions.")
+            end
+        end)
+        RegisterKeyMapping("radar_fr_cam", "Lock/Unlock Front Plate", "keyboard", "Numpad9")
 
-		-- Locks front plate reader
-		RegisterCommand("radar_fr_cam", function()
-			if (not RADAR:GetKeyLockState() and PLY:CanControlRadar()) then
-				READER:LockCam("front", true, false)
+        -- Locks/unlocks rear plate
+        RegisterCommand("radar_bk_cam", function()
+            if (not RADAR:GetKeyLockState() and PLY:CanControlRadar()) then
+                READER:LockCam("rear", true, false)
+                SYNC:LockReaderCam("rear", READER:GetCameraDataPacket("rear"))
+                UTIL:Log("Rear plate reader locked/unlocked.")
+            else
+                UTIL:Log("Failed to lock/unlock rear plate reader: Keylock active or insufficient permissions.")
+            end
+        end)
+        RegisterKeyMapping("radar_bk_cam", "Lock/Unlock Rear Plate", "keyboard", "Numpad6")
 
-				SYNC:LockReaderCam("front", READER:GetCameraDataPacket("front"))
-			end
-		end)
-		RegisterKeyMapping("radar_fr_cam", "Front Plate Reader Lock/Unlock", "keyboard", CONFIG.keyDefaults.plate_front_lock)
+        -- Toggles the key lock state
+        RegisterCommand("radar_key_lock", function()
+            RADAR:ToggleKeyLock()
+            UTIL:Log("Keylock state toggled.")
+        end)
+        RegisterKeyMapping("radar_key_lock", "Toggle Keylock", "keyboard", "L")
 
-		-- Locks rear plate reader
-		RegisterCommand("radar_bk_cam", function()
-			if (not RADAR:GetKeyLockState() and PLY:CanControlRadar()) then
-				READER:LockCam("rear", true, false)
+        -- **Copy Front Plate**
+        RegisterCommand("radar_copy_front_plate", function()
+            UTIL:Log("radar_copy_front_plate keybind pressed.")
 
-				SYNC:LockReaderCam("rear", READER:GetCameraDataPacket("rear"))
-			end
-		end)
-		RegisterKeyMapping("radar_bk_cam", "Rear Plate Reader Lock/Unlock", "keyboard", CONFIG.keyDefaults.plate_rear_lock)
+            local displayState = READER:GetDisplayState()
+            local frontPlate = READER:GetPlate("front")
 
-		-- Toggles the key lock state
-		RegisterCommand("radar_key_lock", function()
-			RADAR:ToggleKeyLock()
-		end)
-		RegisterKeyMapping("radar_key_lock", "Toggle Keybind Lock", "keyboard", CONFIG.keyDefaults.key_lock)
+            UTIL:Log(string.format("DisplayState: %s, FrontPlate: %s", tostring(displayState), tostring(frontPlate)))
 
-		-- **Updated Command: Copy Front Plate**
-		RegisterCommand("radar_copy_front_plate", function()
-			local displayState = READER:GetDisplayState()
-			local frontPlate = READER:GetPlate("front")
-			local vehicleStateValid = PLY:VehicleStateValid()
+            if (displayState and frontPlate ~= "") then
+                -- Send NUI message to copy front plate
+                SendNUIMessage({
+                    _type = "copyToClipboard",
+                    plateType = "front"
+                })
+                UTIL:Log("Front plate copy command executed via keybind.")
+            else
+                UTIL:Log("Front plate copy command failed: Plate box is empty or display not active.")
+                UTIL:Notify("Cannot copy front plate: Plate box is empty or display not active.")
+            end
+        end)
+        RegisterKeyMapping("radar_copy_front_plate", "Copy Front License Plate", "keyboard", "Numpad1")
 
-			if (displayState and frontPlate ~= "") and vehicleStateValid then
-				-- Send NUI message to copy front plate
-				SendNUIMessage({
-					_type = "copyToClipboard",
-					plateType = "front"
-				})
-			else
-				return
-			end
-		end)
-		RegisterKeyMapping("radar_copy_front_plate", "Copy Front License Plate", "keyboard", CONFIG.keyDefaults.copy_front_plate)
+        -- **Copy Rear Plate**
+        RegisterCommand("radar_copy_rear_plate", function()
+            UTIL:Log("radar_copy_rear_plate keybind pressed.")
 
-		-- **Updated Command: Copy Rear Plate**
-		RegisterCommand("radar_copy_rear_plate", function()
-			local displayState = READER:GetDisplayState()
-			local rearPlate = READER:GetPlate("rear")
+            local displayState = READER:GetDisplayState()
+            local rearPlate = READER:GetPlate("rear")
 
-			if (displayState and rearPlate ~= "") then
-				-- Send NUI message to copy rear plate
-				SendNUIMessage({
-					_type = "copyToClipboard",
-					plateType = "rear"
-				})
-			else
-				return
-			end
-		end)
-		RegisterKeyMapping("radar_copy_rear_plate", "Copy Rear License Plate", "keyboard", CONFIG.keyDefaults.copy_rear_plate)
+            UTIL:Log(string.format("DisplayState: %s, RearPlate: %s", tostring(displayState), tostring(rearPlate)))
 
-		-- Deletes all of the KVPs
-		RegisterCommand("reset_radar_data", function()
-			DeleteResourceKvp("wk_wars2x_ui_data")
-			DeleteResourceKvp("wk_wars2x_om_data")
-			DeleteResourceKvp("wk_wars2x_new_user")
+            if (displayState and rearPlate ~= "") then
+                -- Send NUI message to copy rear plate
+                SendNUIMessage({
+                    _type = "copyToClipboard",
+                    plateType = "rear"
+                })
+                UTIL:Log("Rear plate copy command executed via keybind.")
+            else
+                UTIL:Log("Rear plate copy command failed: Plate box is empty or display not active.")
+                UTIL:Notify("Cannot copy rear plate: Plate box is empty or display not active.")
+            end
+        end)
+        RegisterKeyMapping("radar_copy_rear_plate", "Copy Rear License Plate", "keyboard", "Numpad3")
 
-			UTIL:Notify("Radar data deleted, please immediately restart your game without opening the radar's remote.")
-		end, false)
-		TriggerEvent("chat:addSuggestion", "/reset_radar_data", "Resets the KVP data stored for the wk_wars2x resource.")
-	else
-		UTIL:Log("ERROR: Resource name is not wk_wars2x. Key binds will not be registered for compatibility reasons. Contact the server owner and ask them to change the resource name back to wk_wars2x")
-	end
+        -- Deletes all of the KVPs
+        RegisterCommand("reset_radar_data", function()
+            DeleteResourceKvp("wk_wars2x_ui_data")
+            DeleteResourceKvp("wk_wars2x_om_data")
+            DeleteResourceKvp("wk_wars2x_new_user")
+
+            UTIL:Notify("Radar data deleted, please immediately restart your game without opening the radar's remote.")
+            UTIL:Log("Radar data reset via /reset_radar_data command.")
+        end, false)
+        TriggerEvent("chat:addSuggestion", "/reset_radar_data", "Resets the KVP data stored for the wk_wars2x resource.")
+    else
+        UTIL:Log("ERROR: Resource name is not wk_wars2x. Key binds will not be registered for compatibility reasons. Contact the server owner and ask them to change the resource name back to wk_wars2x")
+    end
 end
 
+-- Ensure the RegisterKeyBinds function is called during initialization
+Citizen.CreateThread(function()
+    RegisterKeyBinds()
+    -- ... any other initialization code ...
+end)
 
+-- Command to toggle debug mode in-game (optional)
+RegisterCommand("toggle_debug_mode", function()
+    CONFIG.debugMode = not CONFIG.debugMode
+    local state = CONFIG.debugMode and "enabled" or "disabled"
+    UTIL:Notify("Debug mode " .. state .. ".")
+    UTIL:Log("Debug mode has been " .. state .. ".")
+end, false)
+RegisterKeyMapping("toggle_debug_mode", "Toggle Debug Mode", "keyboard", "F12") -- Assign a key of your choice
+
+-- Add a chat suggestion for the debug toggle command
+TriggerEvent("chat:addSuggestion", "/toggle_debug_mode", "Toggles the debug mode on or off.")
 
 
 
