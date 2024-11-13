@@ -44,76 +44,116 @@ local pairs = pairs
 	UI loading and key binds registering
 ----------------------------------------------------------------------------------]]--
 local function RegisterKeyBinds()
-	if ( UTIL:IsResourceNameValid() ) then
-		UTIL:Log( "Registering radar commands and key binds." )
+	if (UTIL:IsResourceNameValid()) then
+		UTIL:Log("Registering radar commands and key binds.")
 
 		-- Opens the remote control
-		RegisterCommand( "radar_remote", function()
-			if ( not RADAR:GetKeyLockState() ) then
+		RegisterCommand("radar_remote", function()
+			if (not RADAR:GetKeyLockState()) then
 				RADAR:OpenRemote()
 			end
-		end )
-		RegisterKeyMapping( "radar_remote", "Open Remote Control", "keyboard", CONFIG.keyDefaults.remote_control )
+		end)
+		RegisterKeyMapping("radar_remote", "Open Remote Control", "keyboard", CONFIG.keyDefaults.remote_control)
 
 		-- Locks speed from front antenna
-		RegisterCommand( "radar_fr_ant", function()
-			if ( not RADAR:GetKeyLockState() and PLY:CanControlRadar() ) then
-				RADAR:LockAntennaSpeed( "front", nil )
+		RegisterCommand("radar_fr_ant", function()
+			if (not RADAR:GetKeyLockState() and PLY:CanControlRadar()) then
+				RADAR:LockAntennaSpeed("front", nil)
 
-				SYNC:LockAntennaSpeed( "front", RADAR:GetAntennaDataPacket( "front" ) )
+				SYNC:LockAntennaSpeed("front", RADAR:GetAntennaDataPacket("front"))
 			end
-		end )
-		RegisterKeyMapping( "radar_fr_ant", "Front Antenna Lock/Unlock", "keyboard", CONFIG.keyDefaults.front_lock )
+		end)
+		RegisterKeyMapping("radar_fr_ant", "Front Antenna Lock/Unlock", "keyboard", CONFIG.keyDefaults.front_lock)
 
 		-- Locks speed from rear antenna
-		RegisterCommand( "radar_bk_ant", function()
-			if ( not RADAR:GetKeyLockState() and PLY:CanControlRadar() ) then
-				RADAR:LockAntennaSpeed( "rear", nil )
+		RegisterCommand("radar_bk_ant", function()
+			if (not RADAR:GetKeyLockState() and PLY:CanControlRadar()) then
+				RADAR:LockAntennaSpeed("rear", nil)
 
-				SYNC:LockAntennaSpeed( "rear", RADAR:GetAntennaDataPacket( "rear" ) )
+				SYNC:LockAntennaSpeed("rear", RADAR:GetAntennaDataPacket("rear"))
 			end
-		end )
-		RegisterKeyMapping( "radar_bk_ant", "Rear Antenna Lock/Unlock", "keyboard", CONFIG.keyDefaults.rear_lock )
+		end)
+		RegisterKeyMapping("radar_bk_ant", "Rear Antenna Lock/Unlock", "keyboard", CONFIG.keyDefaults.rear_lock)
 
 		-- Locks front plate reader
-		RegisterCommand( "radar_fr_cam", function()
-			if ( not RADAR:GetKeyLockState() and PLY:CanControlRadar() ) then
-				READER:LockCam( "front", true, false )
+		RegisterCommand("radar_fr_cam", function()
+			if (not RADAR:GetKeyLockState() and PLY:CanControlRadar()) then
+				READER:LockCam("front", true, false)
 
-				SYNC:LockReaderCam( "front", READER:GetCameraDataPacket( "front" ) )
+				SYNC:LockReaderCam("front", READER:GetCameraDataPacket("front"))
 			end
-		end )
-		RegisterKeyMapping( "radar_fr_cam", "Front Plate Reader Lock/Unlock", "keyboard", CONFIG.keyDefaults.plate_front_lock )
+		end)
+		RegisterKeyMapping("radar_fr_cam", "Front Plate Reader Lock/Unlock", "keyboard", CONFIG.keyDefaults.plate_front_lock)
 
 		-- Locks rear plate reader
-		RegisterCommand( "radar_bk_cam", function()
-			if ( not RADAR:GetKeyLockState() and PLY:CanControlRadar() ) then
-				READER:LockCam( "rear", true, false )
+		RegisterCommand("radar_bk_cam", function()
+			if (not RADAR:GetKeyLockState() and PLY:CanControlRadar()) then
+				READER:LockCam("rear", true, false)
 
-				SYNC:LockReaderCam( "rear", READER:GetCameraDataPacket( "rear" ) )
+				SYNC:LockReaderCam("rear", READER:GetCameraDataPacket("rear"))
 			end
-		end )
-		RegisterKeyMapping( "radar_bk_cam", "Rear Plate Reader Lock/Unlock", "keyboard", CONFIG.keyDefaults.plate_rear_lock )
+		end)
+		RegisterKeyMapping("radar_bk_cam", "Rear Plate Reader Lock/Unlock", "keyboard", CONFIG.keyDefaults.plate_rear_lock)
 
 		-- Toggles the key lock state
-		RegisterCommand( "radar_key_lock", function()
+		RegisterCommand("radar_key_lock", function()
 			RADAR:ToggleKeyLock()
-		end )
-		RegisterKeyMapping( "radar_key_lock", "Toggle Keybind Lock", "keyboard", CONFIG.keyDefaults.key_lock )
+		end)
+		RegisterKeyMapping("radar_key_lock", "Toggle Keybind Lock", "keyboard", CONFIG.keyDefaults.key_lock)
+
+		-- **Updated Command: Copy Front Plate**
+		RegisterCommand("radar_copy_front_plate", function()
+			local displayState = READER:GetDisplayState()
+			local frontPlate = READER:GetPlate("front")
+			local vehicleStateValid = PLY:VehicleStateValid()
+
+			if (displayState and frontPlate ~= "") and vehicleStateValid then
+				-- Send NUI message to copy front plate
+				SendNUIMessage({
+					_type = "copyToClipboard",
+					plateType = "front"
+				})
+			else
+				return
+			end
+		end)
+		RegisterKeyMapping("radar_copy_front_plate", "Copy Front License Plate", "keyboard", CONFIG.keyDefaults.copy_front_plate)
+
+		-- **Updated Command: Copy Rear Plate**
+		RegisterCommand("radar_copy_rear_plate", function()
+			local displayState = READER:GetDisplayState()
+			local rearPlate = READER:GetPlate("rear")
+
+			if (displayState and rearPlate ~= "") then
+				-- Send NUI message to copy rear plate
+				SendNUIMessage({
+					_type = "copyToClipboard",
+					plateType = "rear"
+				})
+			else
+				return
+			end
+		end)
+		RegisterKeyMapping("radar_copy_rear_plate", "Copy Rear License Plate", "keyboard", CONFIG.keyDefaults.copy_rear_plate)
 
 		-- Deletes all of the KVPs
-		RegisterCommand( "reset_radar_data", function()
-			DeleteResourceKvp( "wk_wars2x_ui_data" )
-			DeleteResourceKvp( "wk_wars2x_om_data" )
-			DeleteResourceKvp( "wk_wars2x_new_user" )
+		RegisterCommand("reset_radar_data", function()
+			DeleteResourceKvp("wk_wars2x_ui_data")
+			DeleteResourceKvp("wk_wars2x_om_data")
+			DeleteResourceKvp("wk_wars2x_new_user")
 
-			UTIL:Notify( "Radar data deleted, please immediately restart your game without opening the radar's remote." )
-		end, false )
-		TriggerEvent( "chat:addSuggestion", "/reset_radar_data", "Resets the KVP data stored for the wk_wars2x resource." )
+			UTIL:Notify("Radar data deleted, please immediately restart your game without opening the radar's remote.")
+		end, false)
+		TriggerEvent("chat:addSuggestion", "/reset_radar_data", "Resets the KVP data stored for the wk_wars2x resource.")
 	else
-		UTIL:Log( "ERROR: Resource name is not wk_wars2x. Key binds will not be registered for compatibility reasons. Contact the server owner and ask them to change the resource name back to wk_wars2x" )
+		UTIL:Log("ERROR: Resource name is not wk_wars2x. Key binds will not be registered for compatibility reasons. Contact the server owner and ask them to change the resource name back to wk_wars2x")
 	end
 end
+
+
+
+
+
 
 local function LoadUISettings()
 	UTIL:Log( "Attempting to load saved UI settings data." )
@@ -404,33 +444,36 @@ function RADAR:SetDisplayHidden( state ) self.vars.hidden = state end
 -- Opens the remote only if the pause menu is not open and the player's vehicle state is valid, as the
 -- passenger can also open the remote, we check the config variable as well.
 function RADAR:OpenRemote()
-	if ( not IsPauseMenuActive() and PLY:CanViewRadar() ) then
-		-- Get the remote open state from the other player
-		local openByOtherPly = SYNC:IsRemoteAlreadyOpen( PLY:GetOtherPed() )
+    if (not IsPauseMenuActive() and PLY:CanViewRadar()) then
+        -- Get the remote open state from the other player
+        local openByOtherPly = SYNC:IsRemoteAlreadyOpen(PLY:GetOtherPed())
 
-		-- Check that the remote can be opened
-		if ( not openByOtherPly ) then
-			-- Tell the NUI side to open the remote
-			SendNUIMessage( { _type = "openRemote" } )
+        -- Check that the remote can be opened
+        if (not openByOtherPly) then
+            -- Tell the NUI side to open the remote
+            SendNUIMessage({ _type = "openRemote" })
 
-			SYNC:SetRemoteOpenState( true )
+            SYNC:SetRemoteOpenState(true)
 
-			if ( CONFIG.allow_quick_start_video ) then
-				-- Display the new user popup if we can
-				local show = GetResourceKvpInt( "wk_wars2x_new_user" )
+            if (CONFIG.allow_quick_start_video) then
+                -- Display the new user popup if we can
+                local show = GetResourceKvpInt("wk_wars2x_new_user")
 
-				if ( show == 0 ) then
-					SendNUIMessage( { _type = "showNewUser" } )
-				end
-			end
+                if (show == 0) then
+                    SendNUIMessage({ _type = "showNewUser" })
+                end
+            end
 
-			-- Bring focus to the NUI side
-			SetNuiFocus( true, true )
-		else
-			UTIL:Notify( "Another player already has the remote open." )
-		end
-	end
+            -- Set NUI Focus to true
+            SetNuiFocus(true, true)
+            RADAR.isRemoteOpen = true -- **Set the flag to true**
+            UTIL:Log("Remote UI opened. isRemoteOpen set to true.")
+        else
+            UTIL:Notify("Another player already has the remote open.")
+        end
+    end
 end
+
 
 -- Event to open the remote
 RegisterNetEvent( "wk:openRemote" )
@@ -1492,18 +1535,21 @@ RegisterNUICallback( "togglePower", function( data, cb )
 end )
 
 -- Runs when the user presses the ESC or RMB when the remote is open
-RegisterNUICallback( "closeRemote", function( data, cb )
-	-- Remove focus to the NUI side
-	SetNuiFocus( false, false )
+RegisterNUICallback("closeRemote", function(data, cb)
+    -- Remove focus to the NUI side
+    SetNuiFocus(false, false)
 
-	if ( RADAR:IsMenuOpen() ) then
-		RADAR:CloseMenu( false )
-	end
+    if (RADAR:IsMenuOpen()) then
+        RADAR:CloseMenu(false)
+    end
 
-	SYNC:SetRemoteOpenState( false )
+    SYNC:SetRemoteOpenState(false)
+    RADAR.isRemoteOpen = false -- **Unset the flag**
+    UTIL:Log("Remote UI closed. isRemoteOpen set to false.")
 
-	cb( "ok" )
-end )
+    cb("ok")
+end)
+
 
 -- Runs when the user presses any of the antenna mode buttons on the remote
 RegisterNUICallback( "setAntennaMode", function( data, cb )
