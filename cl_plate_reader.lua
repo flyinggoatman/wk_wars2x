@@ -54,7 +54,7 @@ local function RegisterKeyBinds()
             -- Check if the player is in a valid vehicle
             if PLY:VehicleStateValid() then
                 -- Show a message indicating they are in a valid vehicle
-                UTIL:Notify("Vehicle state is valid. You can use the plate reader.")
+                UTIL:Notify("Vehicle state is valid. Open up the plate reader to copy plates.")
                 
                 local frontPlate = READER:GetPlate("front")
 
@@ -82,7 +82,7 @@ local function RegisterKeyBinds()
             -- Check if the player is in a valid vehicle
             if PLY:VehicleStateValid() then
                 -- Show a message indicating they are in a valid vehicle
-                UTIL:Notify("Vehicle state is valid. You can use the plate reader.")
+                UTIL:Notify("Vehicle state is valid. Open up the plate reader to copy plates.")
                 
                 local rearPlate = READER:GetPlate("rear")
 
