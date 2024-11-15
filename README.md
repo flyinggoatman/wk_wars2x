@@ -26,7 +26,9 @@ The default key binds can be viewed in-game through the operator manual or in th
 | Copy rear plate to clipboard  | Numpad 3                 | Copies the rear plate text to clipboard and shows a notification.                     |
 | Toggle keylock                | L                        | Toggles the keylock state, disabling keybinds until keylock is toggled again.         |
 
-## Script ConfigurationAll configurations are done inside the `config.lua` file. Key options include setting default key binds, configuring operator menu defaults, and adjusting UI scale and safe zone.
+## Script Configuration
+
+All configurations are done inside the `config.lua` file. Key options include setting default key binds, configuring operator menu defaults, and adjusting UI scale and safe zone.
 
 ### Key Configuration
 
