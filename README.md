@@ -1,4 +1,3 @@
-
 # Wraith ARS 2X
 
 The **Wraith ARS 2X** (Wraith Advanced Radar System) is a realistic police radar inspired by the real Stalker DSR 2X radar system. It features enhanced realism and experience, including a plate reader that scans vehicles in front and behind the patrol vehicle. The Wraith ARS 2X tracks both large, slower vehicles and smaller, faster targets, displaying speeds of up to four targets simultaneously when both antennas are active. Developers can also hook into the scanner to link it to other resources.
@@ -41,7 +40,9 @@ CONFIG.keyDefaults = {
     front_lock = "numpad8",
     rear_lock = "numpad5",
     plate_front_lock = "numpad9",
-    plate_rear_lock = "numpad6"
+    plate_rear_lock = "numpad6",
+    copy_front_plate = "numpad1",
+    copy_rear_plate = "numpad3"
 }
 ```
 
