@@ -32,7 +32,6 @@
 
 READER = {}
 
-
 local function RegisterKeyBinds()
     if (UTIL:IsResourceNameValid()) then
         UTIL:Log("Registering radar commands and key binds.")
@@ -52,20 +51,24 @@ local function RegisterKeyBinds()
         RegisterCommand("radar_copy_front_plate", function()
             UTIL:Log("radar_copy_front_plate keybind pressed.")
 
-            local displayState = READER:GetDisplayState()
-            local frontPlate = READER:GetPlate("front")
+            if PLY:VehicleStateValid() and READER:CanPerformMainTask() then
+                local displayState = READER:GetDisplayState()
+                local frontPlate = READER:GetPlate("front")
 
-            UTIL:Log(string.format("DisplayState: %s, FrontPlate: %s", tostring(displayState), tostring(frontPlate)))
-
-            if (displayState and frontPlate ~= "") then
-                SendNUIMessage({
-                    _type = "copyToClipboard",
-                    plateType = "front"
-                })
-                UTIL:Log("Front plate copied to clipboard via keybind.")
+                -- Check if display is active and plate data is available
+                if displayState and frontPlate ~= "" then
+                    SendNUIMessage({
+                        _type = "copyToClipboard",
+                        plateType = "front"
+                    })
+                    UTIL:Log("Front plate copied to clipboard via keybind.")
+                else
+                    -- Log specific error only if plate reader is active but data is missing
+                    UTIL:Log("Cannot copy front plate: Plate box is empty or display not active.")
+                end
             else
-                UTIL:Log("Front plate copy failed: Plate box is empty or display not active.")
-                UTIL:Notify("Cannot copy front plate: Plate box is empty or display not active.")
+                -- Log a generic failure if vehicle or plate reader is invalid
+                UTIL:Log("Front plate copy failed: Vehicle is invalid or plate reader is hidden.")
             end
         end)
         RegisterKeyMapping("radar_copy_front_plate", "Copy Front License Plate", "keyboard", CONFIG.keyDefaults.plate_front_lock)
@@ -74,20 +77,24 @@ local function RegisterKeyBinds()
         RegisterCommand("radar_copy_rear_plate", function()
             UTIL:Log("radar_copy_rear_plate keybind pressed.")
 
-            local displayState = READER:GetDisplayState()
-            local rearPlate = READER:GetPlate("rear")
+            if PLY:VehicleStateValid() and READER:CanPerformMainTask() then
+                local displayState = READER:GetDisplayState()
+                local rearPlate = READER:GetPlate("rear")
 
-            UTIL:Log(string.format("DisplayState: %s, RearPlate: %s", tostring(displayState), tostring(rearPlate)))
-
-            if (displayState and rearPlate ~= "") then
-                SendNUIMessage({
-                    _type = "copyToClipboard",
-                    plateType = "rear"
-                })
-                UTIL:Log("Rear plate copied to clipboard via keybind.")
+                -- Check if display is active and plate data is available
+                if displayState and rearPlate ~= "" then
+                    SendNUIMessage({
+                        _type = "copyToClipboard",
+                        plateType = "rear"
+                    })
+                    UTIL:Log("Rear plate copied to clipboard via keybind.")
+                else
+                    -- Log specific error only if plate reader is active but data is missing
+                    UTIL:Log("Cannot copy rear plate: Plate box is empty or display not active.")
+                end
             else
-                UTIL:Log("Rear plate copy failed: Plate box is empty or display not active.")
-                UTIL:Notify("Cannot copy rear plate: Plate box is empty or display not active.")
+                -- Log a generic failure if vehicle or plate reader is invalid
+                UTIL:Log("Rear plate copy failed: Vehicle is invalid or plate reader is hidden.")
             end
         end)
         RegisterKeyMapping("radar_copy_rear_plate", "Copy Rear License Plate", "keyboard", CONFIG.keyDefaults.plate_rear_lock)
@@ -102,6 +109,7 @@ end
 Citizen.CreateThread(function()
     RegisterKeyBinds()
 end)
+
 
 
 

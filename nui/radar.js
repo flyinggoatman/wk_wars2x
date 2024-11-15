@@ -1172,11 +1172,10 @@ default:
 
 
 
-// Function to copy text to clipboard
+// Function to copy text to clipboard and play a sound
 function copyPlateToClipboard(plateType) {
-    // Get the plate text element based on plateType
-    let plateTextElement = elements.plates[plateType].fill;
-    let plateText = plateTextElement.text();
+    let plateTextElement = document.getElementById(`${plateType}PlateTextFill`);
+    let plateText = plateTextElement ? plateTextElement.textContent : "";
 
     // Create a temporary textarea for clipboard copying
     let textarea = document.createElement('textarea');
@@ -1185,19 +1184,19 @@ function copyPlateToClipboard(plateType) {
     textarea.select();
 
     try {
-        // Attempt to copy the text to the clipboard
         let successful = document.execCommand('copy');
-        let msg = successful ? "Plate copied to clipboard" : "Failed to copy plate";
+        let msg = successful ? "Plate copied to clipboard!" : "Failed to copy plate.";
+        
+        // Show the notification and play audio if successful
         showNotification(msg);
-        playAudio("beep", 1.0); // Play beep sound on success
+        if (successful) {
+            playAudio("beep", 1.0);  // Ensure 'beep' sound exists in audioNames
+        }
         console.log(`[Wraith ARS 2X] ${msg} (${plateType} plate).`);
     } catch (err) {
-        // Handle errors and notify user of failure
         showNotification('Clipboard copy not supported.');
         console.error('Clipboard copy failed:', err);
     }
-
-    // Remove the temporary textarea
     document.body.removeChild(textarea);
 }
 
@@ -1207,10 +1206,41 @@ function showNotification(message) {
     notification.textContent = message;
     notification.classList.add('show');
 
-    // Remove the notification after 2 seconds
     setTimeout(() => {
         notification.classList.remove('show');
     }, 2000);
 }
 
-} ); // Ensure this bracket corresponds to the proper block
+// Function to log messages to txAdmin and console
+function txAdminLog(message) {
+    fetch(`https://${GetParentResourceName()}/txAdminLog`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+    }).catch(error => {
+        console.error(`[Wraith ARS 2X] Failed to send log to txAdmin:`, error);
+    });
+}
+
+// Function to play audio, log to console, and log to txAdmin
+function playAudio(name, volume = 1.0) {
+    const audioFile = audioNames[name];
+    if (audioFile) {
+        const audio = new Audio(`sounds/${audioFile}`);
+        audio.volume = volume;
+
+        audio.play().then(() => {
+            const logMessage = `[Wraith ARS 2X] Sound played: ${name}`;
+            console.log(logMessage);
+            txAdminLog(logMessage);  // Log to txAdmin
+        }).catch(error => {
+            const errorMessage = `[Wraith ARS 2X] Failed to play sound: ${name}`;
+            console.error(errorMessage, error);
+            txAdminLog(errorMessage);  // Log error to txAdmin
+        });
+    } else {
+        const warnMessage = `[Wraith ARS 2X] Audio file not found: ${name}`;
+        console.warn(warnMessage);
+        txAdminLog(warnMessage);  // Log missing file to txAdmin
+    }
+}});
