@@ -1192,6 +1192,7 @@ function copyPlateToClipboard(plateType) {
         playAudio("beep", 1.0); // Play beep sound on success
         console.log(`[Wraith ARS 2X] ${msg} (${plateType} plate).`);
     } catch (err) {
+        // Handle errors and notify user of failure
         showNotification('Clipboard copy not supported.');
         console.error('Clipboard copy failed:', err);
     }
@@ -1211,4 +1212,5 @@ function showNotification(message) {
         notification.classList.remove('show');
     }, 2000);
 }
-} );
+
+} ); // Ensure this bracket corresponds to the proper block

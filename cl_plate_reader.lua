@@ -68,7 +68,7 @@ local function RegisterKeyBinds()
                 UTIL:Notify("Cannot copy front plate: Plate box is empty or display not active.")
             end
         end)
-        RegisterKeyMapping("radar_copy_front_plate", "Copy Front License Plate", "keyboard", "Numpad1")
+        RegisterKeyMapping("radar_copy_front_plate", "Copy Front License Plate", "keyboard", CONFIG.keyDefaults.plate_front_lock)
 
         -- Copy Rear Plate Command
         RegisterCommand("radar_copy_rear_plate", function()
@@ -90,9 +90,9 @@ local function RegisterKeyBinds()
                 UTIL:Notify("Cannot copy rear plate: Plate box is empty or display not active.")
             end
         end)
-        RegisterKeyMapping("radar_copy_rear_plate", "Copy Rear License Plate", "keyboard", "Numpad3")
+        RegisterKeyMapping("radar_copy_rear_plate", "Copy Rear License Plate", "keyboard", CONFIG.keyDefaults.plate_rear_lock)
 
-        -- Additional commands...
+        -- Additional commands with CONFIG key mappings
     else
         UTIL:Log("ERROR: Resource name is not wk_wars2x. Key binds will not be registered for compatibility reasons. Contact the server owner and ask them to change the resource name back to wk_wars2x.")
     end
