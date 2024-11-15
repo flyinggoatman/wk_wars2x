@@ -75,7 +75,6 @@ const lockAudio =
 // that was in the JS file for WraithRS
 const elements = 
 {
-<<<<<<< HEAD
 	radar: $( "#radarFrame" ),
 	remote: $( "#rc" ), 
 	plateReader: $( "#plateReaderFrame" ),
@@ -202,187 +201,6 @@ const elements =
 	}
 }
 
-=======
-    radar: $( "#radarFrame" ),
-    remote: $( "#rc" ), 
-    plateReader: $( "#plateReaderFrame" ),
-
-    pwrBtn: $( "#pwrBtn" ), 
-
-    uiSettingsBtn: $( "#uiSettings" ), 
-    uiSettingsBox: $( "#uiSettingsBox" ), 
-    closeUiBtn: $( "#closeUiSettings" ),
-    
-    plateReaderBtn: $( "#plateReaderBtn" ), 
-    plateReaderBox: $( "#plateReaderBox" ), 
-    boloText: $( "#boloText" ), 
-    setBoloBtn: $( "#setBoloPlate" ), 
-    clearBoloBtn: $( "#clearBoloPlate" ), 
-    closePrBtn: $( "#closePlateReaderSettings" ),
-
-    openHelp: $( "#helpBtn" ), 
-    helpWindow: $( "#helpWindow" ), 
-    helpWeb: $( "#helpWeb" ), 
-    closeHelp: $( "#closeHelp" ), 
-
-    closeNewUser: $( "#closeNewUserMsg" ),
-    newUser: $( "#newUser" ),
-    openQsv: $( "#showQuickStartVideo" ),
-    qsvWindow: $( "#quickStart" ), 
-    qsvWeb: $( "#quickStartVideo" ),
-    closeQsv: $( "#closeQuickStart" ),
-
-    radarScaling: {
-        increase: $( "#radarIncreaseScale" ),
-        decrease: $( "#radarDecreaseScale" ),
-        display: $( "#radarScaleDisplay" )
-    }, 
-
-    remoteScaling: {
-        increase: $( "#remoteIncreaseScale" ),
-        decrease: $( "#remoteDecreaseScale" ),
-        display: $( "#remoteScaleDisplay" )
-    },
-
-    plateReaderScaling: {
-        increase: $( "#readerIncreaseScale" ),
-        decrease: $( "#readerDecreaseScale" ),
-        display: $( "#readerScaleDisplay" )
-    },
-
-    plates: {
-        front: {
-            plate: $( "#frontPlate" ), 
-            text: $( "#frontPlateText" ),
-            fill: $( "#frontPlateTextFill" ),
-            lolite: $( "#frontPlateTextLolite" ),
-            img: $( "#frontPlateImg" ), 
-            lock: $( "#frontPlateLock" )
-        },
-
-        rear: {
-            plate: $( "#rearPlate" ),
-            text: $( "#rearPlateText" ), 
-            fill: $( "#rearPlateTextFill" ), 
-            lolite: $( "#rearPlateTextLolite" ),
-            img: $( "#rearPlateImg" ), 
-            lock: $( "#rearPlateLock" )
-        }
-    },
-
-    // Added copyButtons section
-    copyButtons: {
-        front: $( "#copyFrontPlate" ),
-        rear: $( "#copyRearPlate" )
-    },
-
-    safezoneSlider: $( "#safezone" ), 
-    safezoneDisplay: $( "#safezoneDisplay" ),
-    
-    keyLock: {
-        label: $( "#keyLockLabel" ), 
-        stateLabel: $( "#keyLockStateLabel" )
-    },
-
-    patrolSpeed: $( "#patrolSpeed" ),
-
-    antennas: {
-        front: {
-            targetSpeed: $( "#frontSpeed" ),
-            fastSpeed: $( "#frontFastSpeed" ),
-
-            dirs: {
-                fwd: $( "#frontDirAway" ),
-                bwd: $( "#frontDirTowards" ),
-                fwdFast: $( "#frontFastDirAway" ), 
-                bwdFast: $( "#frontFastDirTowards" )
-            },
-
-            modes: {
-                same: $( "#frontSame" ),
-                opp: $( "#frontOpp" ),
-                xmit: $( "#frontXmit" )
-            },
-
-            fast: {
-                fastLabel: $( "#frontFastLabel" ),
-                lockLabel: $( "#frontFastLockLabel" )
-            }
-        },
-
-        rear: {
-            targetSpeed: $( "#rearSpeed" ),
-            fastSpeed: $( "#rearFastSpeed" ),
-
-            dirs: {
-                fwd: $( "#rearDirTowards" ),
-                bwd: $( "#rearDirAway" ), 
-                fwdFast: $( "#rearFastDirTowards" ), 
-                bwdFast: $( "#rearFastDirAway" )
-            },
-
-            modes: {
-                same: $( "#rearSame" ),
-                opp: $( "#rearOpp" ),
-                xmit: $( "#rearXmit" )
-            },
-
-            fast: {
-                fastLabel: $( "#rearFastLabel" ),
-                lockLabel: $( "#rearFastLockLabel" )
-            }
-        }
-    }
-}
-
-/*------------------------------------------------------------------------------------
-	Event Listeners for Copy Buttons
-------------------------------------------------------------------------------------*/
-elements.copyButtons.front.click(function() {
-    copyPlateToClipboard('front');
-});
-
-elements.copyButtons.rear.click(function() {
-    copyPlateToClipboard('rear');
-});
-
-// Function to Show Notification
-function showNotification(message) {
-    const notification = $('#copyNotification');
-    notification.text(message);
-    notification.addClass('show');
-
-    // Remove the 'show' class after the animation completes
-    setTimeout(function() {
-        notification.removeClass('show');
-    }, 2000); // Duration matches the CSS animation duration
-}
-
-function copyPlateToClipboard(plateType) {
-    // Get the plate text element based on plateType
-    let plateTextElement = elements.plates[plateType].fill;
-    let plateText = plateTextElement.text();
-
-    // Fallback method using a temporary textarea
-    let textarea = document.createElement('textarea');
-    textarea.value = plateText;
-    document.body.appendChild(textarea);
-    textarea.select();
-
-    try {
-        let successful = document.execCommand('copy');
-        showNotification(msg);
-        console.log(`[Wraith ARS 2X] ${msg} (${plateType} plate).`);
-    } catch (err) {
-        showNotification('Clipboard copy not supported.');
-        console.error('Clipboard copy failed:', err);
-    }
-
-    document.body.removeChild(textarea);
-}
-
-
->>>>>>> main/master
 // Antenna mode values
 const modes = 
 {
@@ -400,10 +218,7 @@ const dirs =
 	away: 2
 }
 
-<<<<<<< HEAD
 
-=======
->>>>>>> main/master
 /*------------------------------------------------------------------------------------
 	Hide elements
 ------------------------------------------------------------------------------------*/
@@ -459,10 +274,7 @@ elements.closeQsv.click( function() {
 	sendData( "qsvWatched", {} );
 } )
 
-<<<<<<< HEAD
 
-=======
->>>>>>> main/master
 /*------------------------------------------------------------------------------------
 	Setters
 ------------------------------------------------------------------------------------*/
@@ -1274,7 +1086,6 @@ $( document ).contextmenu( function() {
 	The main event listener, this is where the NUI messages sent by the LUA side arrive 
 	at, they are then handled properly via a switch/case that runs the relevant code
 ------------------------------------------------------------------------------------*/
-<<<<<<< HEAD
 window.addEventListener( "message", function( event ) {
 	var item = event.data; 
 	var type = event.data._type; 
@@ -1401,94 +1212,3 @@ function showNotification(message) {
     }, 2000);
 }
 } );
-=======
-window.addEventListener("message", function(event) {
-    var item = event.data; 
-    var type = event.data._type; 
-
-    switch (type) {
-        // System events 
-        case "loadUiSettings":
-            loadUiSettings(item.data, true);
-            break;
-        case "setUiDefaults":
-            loadUiSettings(item.data, false); 
-            break; 
-        case "displayKeyLock":
-            displayKeyLock(item.state);
-            break; 
-        case "showNewUser":
-            setEleVisible(elements.newUser, true);
-            break; 
-
-        // Radar events
-        case "openRemote":
-            setEleVisible(elements.remote, true); 
-            setUiHasBeenEdited(false); 
-            break; 
-        case "setRadarDisplayState":
-            setEleVisible(elements.radar, item.state); 
-            break; 
-        case "radarPower":
-            radarPower(item.state, item.override, item.fast);
-            break; 
-        case "poweredUp":
-            poweredUp(item.fast);
-            break;
-        case "update":
-            updateDisplays(item.speed, item.antennas);
-            break; 
-        case "antennaXmit":
-            setAntennaXmit(item.ant, item.on);
-            break; 
-        case "antennaMode":
-            setAntennaMode(item.ant, item.mode); 
-            break; 
-        case "antennaLock":
-            setAntennaLock(item.ant, item.state);
-            break; 
-        case "antennaFast":
-            setAntennaFastMode(item.ant, item.state); 
-            break; 
-        case "menu":
-            menu(item.text, item.option); 
-            break;
-        case "settingUpdate":
-            settingUpdate(item.antennaData); 
-            break; 
-
-        // Plate reader events
-        case "setReaderDisplayState":
-            setEleVisible(elements.plateReader, item.state); 
-            break; 
-        case "changePlate":
-            setPlate(item.cam, item.plate, item.index);
-            break;
-        case "lockPlate":
-            setPlateLock(item.cam, item.state, item.isBolo); 
-            break; 
-
-        // **New Case: Handle 'copyToClipboard' Action**
-        // Inside window.addEventListener("message", function(event) { ... })
-		case "copyToClipboard":
-			if (item.plateType === "front" || item.plateType === "rear") {
-                console.log(`[Wraith ARS 2X] Received copyToClipboard message for ${item.plateType} plate.`);
-                copyPlateToClipboard(item.plateType);
-			}
-			break;
-
-        
-        // Audio events
-        case "audio":
-            playAudio(item.name, item.vol); 
-            break; 
-        case "lockAudio":
-            playLockAudio(item.ant, item.dir, item.vol); 
-            break; 
-        
-        // default
-        default:
-            break;
-    }
-});
->>>>>>> main/master
