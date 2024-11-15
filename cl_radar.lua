@@ -404,6 +404,7 @@ function RADAR:SetDisplayHidden( state ) self.vars.hidden = state end
 -- Opens the remote only if the pause menu is not open and the player's vehicle state is valid, as the
 -- passenger can also open the remote, we check the config variable as well.
 function RADAR:OpenRemote()
+<<<<<<< HEAD
 	if ( not IsPauseMenuActive() and PLY:CanViewRadar() ) then
 		-- Get the remote open state from the other player
 		local openByOtherPly = SYNC:IsRemoteAlreadyOpen( PLY:GetOtherPed() )
@@ -432,6 +433,39 @@ function RADAR:OpenRemote()
 	end
 end
 
+=======
+    if (not IsPauseMenuActive() and PLY:CanViewRadar()) then
+        -- Get the remote open state from the other player
+        local openByOtherPly = SYNC:IsRemoteAlreadyOpen(PLY:GetOtherPed())
+
+        -- Check that the remote can be opened
+        if (not openByOtherPly) then
+            -- Tell the NUI side to open the remote
+            SendNUIMessage({ _type = "openRemote" })
+
+            SYNC:SetRemoteOpenState(true)
+
+            if (CONFIG.allow_quick_start_video) then
+                -- Display the new user popup if we can
+                local show = GetResourceKvpInt("wk_wars2x_new_user")
+
+                if (show == 0) then
+                    SendNUIMessage({ _type = "showNewUser" })
+                end
+            end
+
+            -- Set NUI Focus to true
+            SetNuiFocus(true, true)
+            RADAR.isRemoteOpen = true -- **Set the flag to true**
+            UTIL:Log("Remote UI opened. isRemoteOpen set to true.")
+        else
+            UTIL:Notify("Another player already has the remote open.")
+        end
+    end
+end
+
+
+>>>>>>> main/master
 -- Event to open the remote
 RegisterNetEvent( "wk:openRemote" )
 AddEventHandler( "wk:openRemote", function()
@@ -1492,6 +1526,7 @@ RegisterNUICallback( "togglePower", function( data, cb )
 end )
 
 -- Runs when the user presses the ESC or RMB when the remote is open
+<<<<<<< HEAD
 RegisterNUICallback( "closeRemote", function( data, cb )
 	-- Remove focus to the NUI side
 	SetNuiFocus( false, false )
@@ -1504,6 +1539,23 @@ RegisterNUICallback( "closeRemote", function( data, cb )
 
 	cb( "ok" )
 end )
+=======
+RegisterNUICallback("closeRemote", function(data, cb)
+    -- Remove focus to the NUI side
+    SetNuiFocus(false, false)
+
+    if (RADAR:IsMenuOpen()) then
+        RADAR:CloseMenu(false)
+    end
+
+    SYNC:SetRemoteOpenState(false)
+    RADAR.isRemoteOpen = false -- **Unset the flag**
+    UTIL:Log("Remote UI closed. isRemoteOpen set to false.")
+
+    cb("ok")
+end)
+
+>>>>>>> main/master
 
 -- Runs when the user presses any of the antenna mode buttons on the remote
 RegisterNUICallback( "setAntennaMode", function( data, cb )
